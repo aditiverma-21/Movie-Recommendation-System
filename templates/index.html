@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommender</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Movie Recommendation System</h1>
+    
+    <h2>Get Recommendations</h2>
+    <label for="user_id">Enter User ID:</label>
+    <input type="number" id="user_id" placeholder="User ID">
+    <button onclick="getRecommendations()">Get Recommendations</button>
+
+    <h3>Recommended Movies:</h3>
+    <ul id="recommendations"></ul>
+
+    <script>
+        function getRecommendations() {
+            let userId = document.getElementById("user_id").value;
+            fetch(`/recommend/collaborative?user_id=${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    let recList = document.getElementById("recommendations");
+                    recList.innerHTML = ""; 
+
+                    data.forEach(movie => {
+                        let li = document.createElement("li");
+                        li.textContent = movie;
+                        recList.appendChild(li);
+                    });
+                });
+        }
+    </script>
+</body>
+</html>
